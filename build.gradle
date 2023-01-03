@@ -14,6 +14,7 @@ buildscript {
 // 하위 모든 프로젝트 공통 세팅
 subprojects {
     apply plugin: 'java'
+    apply plugin: 'java-library' //없으면 의존성 주입시 api project 사용불가
     apply plugin: 'idea'
     apply plugin: 'org.springframework.boot'
     apply plugin: 'io.spring.dependency-management'
@@ -45,10 +46,9 @@ subprojects {
     }
 }
 
+// 개별 설정 , 의존성 관리
 project(':test-core') {
-    // 공통 코드
-
-    bootJar { enabled = false } // core 은 bootJar 로 패키징 할 필요 없음
+      bootJar { enabled = false } // core 은 bootJar 로 패키징 할 필요 없음
     jar { enabled = true }
 
     dependencies {
@@ -61,7 +61,7 @@ project(':test-api-server') {
 
     dependencies {
         api project(':test-core') // 컴파일 시 velog-core project 로딩
-        implementation 'org.springframework.boot:spring-boot-starter-web'
+//        implementation 'org.springframework.boot:spring-boot-starter-web'
     }
 }
 
@@ -70,6 +70,6 @@ project(':test-batch-server') {
     jar { enabled = false }
 
     dependencies {
-        implementation(':test-core') // 컴파일 시 velog-core project 로딩
+        api project(':test-core') // 컴파일 시 velog-core project 로딩
     }
 }
